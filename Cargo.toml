@@ -5,6 +5,8 @@ edition = "2021"
 
 [dependencies]
 dicom = "0.5.4"
+mockd = { version = "0.4.3", features = ["datetime"] }
+uuid = { version = "1.6.1", features = ["v4"] }
 
 [dependencies.clap]
 version = "4.4.13"
