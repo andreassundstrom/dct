@@ -1,0 +1,11 @@
+[package]
+name = "dct"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dicom = "0.5.4"
+
+[dependencies.clap]
+version = "4.4.13"
+features = ["derive"]
