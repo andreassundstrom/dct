@@ -1,11 +1,8 @@
-use dicom::core::chrono::Datelike;
-use dicom::core::value::DicomDate;
+use clap::{Parser, Subcommand};
 use dicom::dicom_value;
+use dicom::dump::dump_file;
 use dicom::object::{open_file, FileDicomObject, InMemDicomObject};
 use dicom::{core::DataElement, dictionary_std::tags};
-
-use clap::{Parser, Subcommand};
-
 #[derive(Parser)]
 #[command(about)]
 struct Cli {
@@ -15,8 +12,13 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Display information about a dicom file
+    Dump {
+        #[arg(short, long)]
+        filename: String,
+    },
     /// Create a new randomized dicom from a given input file
-    randomize {
+    Randomize {
         /// Filename for input
         #[arg(short, long)]
         filename: String,
@@ -26,11 +28,24 @@ enum Commands {
 fn main() {
     let args = Cli::parse();
     match &args.command {
-        Commands::randomize { filename } => {
+        Commands::Randomize { filename } => {
             println!("Randomizing new dicom from file '{}'", filename);
             let _ = randomize_dicom(filename);
         }
+        Commands::Dump { filename } => {
+            println!("Dumping file '{}'", filename);
+            dump_dicom_file(filename);
+        }
     }
+}
+
+fn dump_dicom_file(input_file: &str) {
+    let obj = match open_file(input_file) {
+        Ok(obj) => obj,
+        Err(err) => panic!("Failed to open file: {:?}", err),
+    };
+
+    dump_file(&obj).unwrap();
 }
 
 fn randomize_dicom(input_file: &str) -> Result<(), Box<dyn std::error::Error>> {

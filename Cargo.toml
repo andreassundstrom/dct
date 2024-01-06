@@ -1,10 +1,10 @@
 [package]
 name = "dct"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
 
 [dependencies]
-dicom = "0.5.4"
+dicom = { version = "0.6.3", default-features = false }
 mockd = { version = "0.4.3", features = ["datetime"] }
 uuid = { version = "1.6.1", features = ["v4"] }
 
