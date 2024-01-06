@@ -24,7 +24,6 @@ enum Commands {
 }
 
 fn main() {
-    println!("HELLO");
     let args = Cli::parse();
     match &args.command {
         Commands::randomize { filename } => {

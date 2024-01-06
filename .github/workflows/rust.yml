@@ -2,21 +2,40 @@ name: Rust
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
+    tags: ["[0-9]+.[0-9]+.[0-9]+"]
   pull_request:
-    branches: [ "main" ]
-
+    branches: ["main"]
+permissions:
+  contents: write
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - uses: actions/checkout@v3
+      - name: Get the release version from the tag
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Build
+        run: cargo build -r
+      - name: Run tests
+        run: cargo test
+      - name: Build archive
+        shell: bash
+        run: |
+          binary_name="dct"
+          dirname="$binary_name-${{ env.VERSION }}"
+          mkdir "$dirname"
+          mv "target/release/$binary_name.exe" "$dirname"
+          7z a "$dirname.zip" "$dirname"
+          echo "ASSET=$dirname.zip" >> $GITHUB_ENV
+      - name: Upload binaries
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            ${{ env.ASSET }}
