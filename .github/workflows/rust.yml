@@ -19,3 +19,11 @@ jobs:
         run: cargo build --verbose
       - name: Run tests
         run: cargo test --verbose
+      - name: Build archive
+        shell: bash
+        run: |
+          binary_name="dct-1.0.0"
+          dirname="$binary_name"
+          mkdir "$dirname"
+          mv "target/release/dct.exe" "$dirname"
+          7z a "$dirname.zip" "$dirname"
