@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           binary_name="dct"
-          dirname="$binary_name-${{ env.VERSION }}"
+          dirname="$binary_name-${{ env.VERSION }}-x86_64-pc-windows"
           mkdir "$dirname"
           mv "target/release/$binary_name.exe" "$dirname"
           7z a "$dirname.zip" "$dirname"
