@@ -1,10 +1,8 @@
-use std::env::ArgsOs;
 use std::ffi::OsString;
-use std::io::BufWriter;
 
 use clap::{Parser, Subcommand};
 use dicom::dicom_value;
-use dicom::dump::{dump_file, dump_file_to};
+use dicom::dump::dump_file;
 use dicom::object::{open_file, FileDicomObject, InMemDicomObject};
 use dicom::{core::DataElement, dictionary_std::tags};
 
