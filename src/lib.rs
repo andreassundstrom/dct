@@ -42,23 +42,18 @@ where
         }
         Commands::Dump { filename } => {
             println!("Dumping file '{}'", filename);
-            let mut buffer = BufWriter::new(Vec::new());
-            dump_dicom_file(filename, &mut buffer);
-            let bytes = buffer.into_inner().unwrap();
-            let string = String::from_utf8(bytes).unwrap();
-            println!("{}", string);
+            dump_dicom_file(filename);
         }
     }
 }
 
-fn dump_dicom_file(input_file: &str, buffer: &mut BufWriter<Vec<u8>>) {
+fn dump_dicom_file(input_file: &str) {
     let obj = match open_file(input_file) {
         Ok(obj) => obj,
         Err(err) => panic!("Failed to open file: {:?}", err),
     };
 
     dump_file(&obj).unwrap();
-    dump_file_to(buffer, &obj).unwrap();
 }
 
 fn randomize_dicom(input_file: &str) -> Result<(), Box<dyn std::error::Error>> {
